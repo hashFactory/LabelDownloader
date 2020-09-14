@@ -18,12 +18,23 @@ import textdistance
 file = open('oauth_works.pickle', 'rb')
 d = pickle.load(file)
 
-label = d.label(14215)
+label = d.label(4830)
 
 
 # print releases to check all is well
 releases = label.releases
-#rev = releases.reverse()
+
+print(dir(releases))
+print(type(releases))
+
+#reverse list to prioritize new releases
+pre_rev_list = []
+for pre_rel in releases:
+    print(pre_rel.year)
+    pre_rev_list.append(pre_rel)
+rev = pre_rev_list.reverse()
+
+print(dir(rev[0]))
 
 #make sure that releases are unique
 #hash_release 
