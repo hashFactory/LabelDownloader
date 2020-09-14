@@ -18,23 +18,24 @@ import textdistance
 file = open('oauth_works.pickle', 'rb')
 d = pickle.load(file)
 
-label = d.label(4830)
+label = d.label(1015178)
 
 
 # print releases to check all is well
 releases = label.releases
 
-print(dir(releases))
-print(type(releases))
-
 #reverse list to prioritize new releases
+rev = []
 pre_rev_list = []
 for pre_rel in releases:
     print(pre_rel.year)
-    pre_rev_list.append(pre_rel)
-rev = pre_rev_list.reverse()
+    rev.append(pre_rel)
+#rev = pre_rev_list.reverse()
 
-print(dir(rev[0]))
+rev = sorted(rev, key=lambda x: (x.year, x.id))
+rev = rev.reverse()
+#within each year sort by last digits of catalogue number
+#TODO start organizing into multiple files for god's sake
 
 #make sure that releases are unique
 #hash_release 
@@ -46,18 +47,6 @@ r_dict = dict()
 r_set = set()
 
 #clean release names
-'''
-hashable_names = []
-for r in releases:
-    titles = ""
-    for t in r.tracklist:
-        titles += str(t.title)
-
-    hashable_names.append(str(r.title).upper + " " + str(r.artist).upper)
-
-for r in releases:
-    obj = hashlib.sha512(r.title)
-    hex_str = '''
 def print_release(rel):
     print("title: \t" + str(rel.title))
     print("artist:\t" + str(rel.artists[0].name))
@@ -70,7 +59,7 @@ def print_release(rel):
 def release_to_hashable(rel):
     pass
 
-for r in releases:
+for r in rev:
     #if str(r.title).upper() not in r_master_names:
     upper_title = str(r.title).upper()
     
