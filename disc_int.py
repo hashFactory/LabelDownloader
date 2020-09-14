@@ -23,7 +23,7 @@ label = d.label(14215)
 
 # print releases to check all is well
 releases = label.releases
-rev = releases.reverse()
+#rev = releases.reverse()
 
 #make sure that releases are unique
 #hash_release 
@@ -61,16 +61,19 @@ def release_to_hashable(rel):
 
 for r in releases:
     #if str(r.title).upper() not in r_master_names:
-    if not r_master_names:
-        #check for "collision"
-        #do it better with lambda functions but too lazy to rn
-        minimum_diff = 1000
-        diff = 1000
-        for test in r_master_names:
-            diff = textdistance.damerau_levenshtein(r.title)
-        r_master_names.append(str(r.title).upper())
+    upper_title = str(r.title).upper()
+    
+    #check for dupes
+    #do it better with lambda functions but too lazy to rn
+    minimum_diff = 1000
+    diff = 1000
+    for test in r_master_names:
+        diff = textdistance.damerau_levenshtein(upper_title, test)
+        if diff < minimum_diff:
+            minimum_diff = diff
+    if minimum_diff > 3 or len(r_master_names) == 0:
+        r_master_names.append(upper_title)
         r_clean.append(r)
-        print("|" + r.title + "|")
         print_release(r)
 
 
